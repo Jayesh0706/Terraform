@@ -30,7 +30,7 @@ resource "aws_iam_role_policy_attachment" "s3_readonly" {
 
 #create an instance profile for the IAM
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
-  name = "ec2-s3-readonly-profile"
+  name = "ec2-s3-readonly"
   role = aws_iam_role.ec2_s3_readonly.name
 }
 
@@ -51,7 +51,7 @@ resource "aws_instance" "http_service" {
               yum install -y python3 pip
               pip3 install flask boto3
               cat <<EOT >> /home/ec2-user/app.py
-              ${file("app.py")}
+              ${file("httpapp.py")}
               EOT
               python3 /home/ec2-user/app.py &
               EOF
@@ -88,12 +88,12 @@ resource "aws_security_group" "http_access" {
   }
 }
 
-output "instance_public_ip" {
+output "ec2_public_ip" {
   value       = aws_instance.http_service.public_ip
-  description = "ec2 public ip - "
+  description = "ec2 public ip  "
 }
 
-output "bucket_content_endpoint" {
+output "copy_paste_this" {
   value       = "http://${aws_instance.http_service.public_ip}:5000/list-bucket-content"
-  description = "copy paste this in url -"
+  description = "for checking "
 }
