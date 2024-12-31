@@ -32,6 +32,8 @@ Returns results in JSON format.
 }
 `
 
+---
+
 ##### **Setup Instructions**
 Prerequisites:
 1) AWS Account with access to S3 (Done in terraform by giving role).
@@ -39,7 +41,7 @@ Prerequisites:
 3) Python 3.x installed along with pip package manager.
 Flask and Boto3 libraries installed.
 
-.
+---
 
 ##### **Deployment to AWS using Terraform:**
 * The service is designed to be deployed on an EC2 instance. The necessary AWS resources (IAM role, ec2, security group) are provisioned using Terraform.
@@ -51,22 +53,33 @@ Flask and Boto3 libraries installed.
 After Terraform completes, it will output the public IP of the EC2 instance. You can access the service via this IP on port 5000(already given url to copy paste in terraform output)
        ` http://<EC2_Public_IP>:5000/list-bucket-content`
 
+---
+
 **Terraform Resources created:**
 1) IAM Role: Provides read-only access to the S3 bucket(given in terraform).
 2) EC2 Instance: Deploys the Flask app with all necessary dependencies.
 3) Security Group: Allows HTTP (port 5000) and SSH (port 22) access to the EC2 instance.
 
+---
+
 **Error Handling:**
 The service gracefully handles invalid or non-existing paths by returning a 404 error with an appropriate message.
 In case of unexpected errors, a 500 internal server error is returned.
 
+---
+
 **Bonus Features:**
 The service is designed to support easy extension for HTTPS and additional security measures.
+
+---
 
 
 **Challenges & Assumptions:**
 1) While performing faced error of no access so IAM roles and policies are configured for read-only access to S3 to tackle the problem.
 
+---
+
 **Conclusion:**
 This service allows for easy retrieval of S3 bucket contents in a specified path, supporting both root-level and nested directories. The project leverages AWS infrastructure with Terraform for deployment and Flask for the HTTP service.
 
+---
