@@ -30,7 +30,7 @@ resource "aws_iam_role_policy_attachment" "s3_readonly" {
 
 #create an instance profile for the IAM
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
-  name = "ec2-s3-readonly-profile"
+  name = "ec2-s3-readonly"
   role = aws_iam_role.ec2_s3_readonly.name
 }
 
