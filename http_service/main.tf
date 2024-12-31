@@ -2,7 +2,7 @@ provider "aws" {
   region = "ap-south-1" # Mumbai
 }
 
-# Create IAM Role
+# Create IAM Role for ec2
 resource "aws_iam_role" "ec2_s3_readonly" {
   name               = "EC2-S3-ReadOnly-Role"
   assume_role_policy = <<EOF
@@ -22,13 +22,13 @@ resource "aws_iam_role" "ec2_s3_readonly" {
 EOF
 }
 
-# Attach S3 ReadOnly Policy to the Role
+#attach policy to the role
 resource "aws_iam_role_policy_attachment" "s3_readonly" {
   role       = aws_iam_role.ec2_s3_readonly.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
 }
 
-# Create an Instance Profile for the IAM Role
+#create an instance profile for the IAM
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
   name = "ec2-s3-readonly-profile"
   role = aws_iam_role.ec2_s3_readonly.name
@@ -37,8 +37,8 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 # EC2 Instance
 resource "aws_instance" "http_service" {
   ami           = "ami-021e165d8c4ff761d" # Amazon Linux
-  instance_type = "t2.micro"              # Free tier
-  key_name      = "new_acc"               # Key name
+  instance_type = "t2.micro"              
+  key_name      = "new_acc"               #mykey
 
   security_groups = [aws_security_group.http_access.name]
 
@@ -57,43 +57,43 @@ resource "aws_instance" "http_service" {
               EOF
 
   tags = {
-    Name = "HTTP-Service-Instance"
+    Name = "http-app-ec2"
   }
 }
 
 # Security Group
 resource "aws_security_group" "http_access" {
-  name        = "http-access-sg"
-  description = "Allow HTTP and SSH access"
+  name        = "http-app-sg"
+  description = "allow http & ssh"
 
   ingress {
     from_port   = 5000
     to_port     = 5000
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow HTTP access from anywhere
+    cidr_blocks = ["0.0.0.0/0"] # allow port 5000
   }
 
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow SSH access from anywhere
+    cidr_blocks = ["0.0.0.0/0"] # qllow port 22
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"] # Allow all outbound traffic
+    cidr_blocks = ["0.0.0.0/0"] # all outgoing traffic allow
   }
 }
 
 output "instance_public_ip" {
   value       = aws_instance.http_service.public_ip
-  description = "Public IP of the EC2 instance"
+  description = "ec2 public ip - "
 }
 
 output "bucket_content_endpoint" {
   value       = "http://${aws_instance.http_service.public_ip}:5000/list-bucket-content"
-  description = "The endpoint to list S3 bucket content"
+  description = "copy paste this in url -"
 }
