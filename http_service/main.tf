@@ -51,7 +51,7 @@ resource "aws_instance" "http_service" {
               yum install -y python3 pip
               pip3 install flask boto3
               cat <<EOT >> /home/ec2-user/app.py
-              ${file("app.py")}
+              ${file("httpapp.py")}
               EOT
               python3 /home/ec2-user/app.py &
               EOF
