@@ -8,7 +8,7 @@ variable "cidr" {
 
 resource "aws_key_pair" "my-key" {
   key_name   = "my-key"
-  public_key = file("~/.ssh/id_rsa.pub")
+  public_key = file("C:/Users/dell/.ssh/id_rsa.pub")
   # Corrected path
 }
 
@@ -83,7 +83,7 @@ resource "aws_instance" "server" {
   connection {
     type        = "ssh"
     user        = "ubuntu"  # Replace with the appropriate username for your EC2 instance
-    private_key = file("C:/Users/dell/.ssh/id_rsa.pub")  # Replace with the path to your private key
+    private_key = file("C:/Users/dell/.ssh/id_rsa")  # Replace with the path to your private key
     host        = self.public_ip
   }
 
